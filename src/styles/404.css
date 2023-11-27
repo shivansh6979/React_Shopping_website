@@ -1,0 +1,22 @@
+.error {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+.error_404 {
+	height: 180px;
+}
+.parent_404 {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	flex-direction: column;
+}
+.backtohome {
+	margin-top: 40px;
+	background-color: rgb(1, 22, 27);
+	color: white;
+	padding: 10px;
+}

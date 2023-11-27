@@ -16,22 +16,32 @@ const LoginPage = () => {
 		type: '',
 	});
 	const [signupOpen, setSignUpOpen] = useState(false);
+	const [error, setError] = useState('');
 	const handleSignUp = (e) => {
 		setSignUpOpen(!signupOpen);
 	};
 	const handlerLogin = () => {
-		axios
-			.post(`${process.env.REACT_APP_BASE_URL}/login`, userCredential)
-			.then((res) => {
-				if (res?.data?.token) {
-					navigate('/Home');
-				} else {
-					dispatch(login(res.data));
-				}
-			})
-			.catch((err) => {
-				console.error('error', err);
-			});
+		if (
+			!userCredential.email ||
+			!userCredential.password ||
+			!userCredential.type
+		) {
+			setError('Please fill Required field');
+		} else {
+			axios
+				.post(`${process.env.REACT_APP_BASE_URL}/login`, userCredential)
+				.then((res) => {
+					if (res?.data?.token && res?.data?.type === 'ADMIN') {
+						navigate('/Home');
+					} else {
+						dispatch(login(res.data));
+					}
+				})
+				.catch((err) => {
+					console.error('error', err);
+				});
+		}
+		console.log('tttttttttt', error);
 	};
 	const handlerChange = (e) => {
 		const { name, value } = e.target;
@@ -40,6 +50,7 @@ const LoginPage = () => {
 			...userCredential,
 			[name]: value,
 		});
+		setError('');
 	};
 
 	const options = [
@@ -49,11 +60,11 @@ const LoginPage = () => {
 		},
 		{
 			label: 'Admin',
-			value: 'admin',
+			value: 'ADMIN',
 		},
 		{
 			label: 'Customer',
-			value: 'customer',
+			value: 'CUSTOMER',
 		},
 	];
 
@@ -75,41 +86,43 @@ const LoginPage = () => {
 								<div className="card-txt">
 									<h3 className="heading"> Login </h3>
 									<div className="input-field">
-										<input
-											type="text"
-											placeholder="Email..."
-											onChange={handlerChange}
-											value={userCredential.email}
-											name="email"
-										/>
-										<input
-											type="password"
-											placeholder="Password..."
-											onChange={handlerChange}
-											value={userCredential.password}
-											name="password"
-										/>
-										<select
-											name="type"
-											value={userCredential.type}
-											onChange={handlerChange}
-										>
-											{options.map((option) => {
-												console.log('pppppppppppp', options);
-												console.log('rrrrrrrrrrrr', option);
-												return (
-													<option
-														key={option.value}
-														value={option.value}
-													>
-														{option.label}
-													</option>
-												);
-											})}
-										</select>
-										{!userCredential && (
-											<p style={{ color: 'red' }}>Please Enter Both Field</p>
-										)}
+										<div className="input-sec">
+											<input
+												className="input-txt-field"
+												type="text"
+												placeholder="Email..."
+												onChange={handlerChange}
+												value={userCredential.email}
+												name="email"
+											/>
+											<input
+												className="input-txt-field"
+												type="password"
+												placeholder="Password..."
+												onChange={handlerChange}
+												value={userCredential.password}
+												name="password"
+											/>
+											<select
+												name="type"
+												value={userCredential.type}
+												onChange={handlerChange}
+											>
+												{options.map((option) => {
+													console.log('pppppppppppp', options);
+													console.log('rrrrrrrrrrrr', option);
+													return (
+														<option
+															key={option.value}
+															value={option.value}
+														>
+															{option.label}
+														</option>
+													);
+												})}
+											</select>
+										</div>
+										<p className="error-txt">{error}</p>
 
 										<div className="parent-toggle">
 											<div className="toggle-txt">

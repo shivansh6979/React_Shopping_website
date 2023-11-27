@@ -2,6 +2,7 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import Home from './pages/Home';
+import UnthorizedError from './404';
 
 function App() {
 	return (
@@ -14,6 +15,10 @@ function App() {
 				<Route
 					path="/Home"
 					element={<Home />}
+				></Route>
+				<Route
+					path="/404"
+					element={<UnthorizedError />}
 				></Route>
 			</Routes>
 		</div>
